@@ -1,0 +1,38 @@
+#!/bin/bash
+
+fullpath=$1
+filename="$(basename -- $fullpath)"
+dir_path="$(dirname $fullpath)"
+# echo "filename: $filename"
+# echo "dir fullpath: $dir_path"
+# SED precisa do -r por causa disso:
+# https://stackoverflow.com/questions/16637799/sed-error-invalid-reference-1-on-s-commands-rhs
+title="$(echo $fullpath | sed -r 's/.*\/(\w+)Exe.*/\1/')"
+
+template=""
+read -r -d '' template << EOM
+---
+title: 'Engenharia de Requisitos - $title' 
+---
+
+<!--
+./sh/md2pdf $fullpath 
+
+Lista de exercícios:
+
+Link da entrega:
+
+-->
+
+**Disciplina**: Requisitos de Software
+
+**Professor**: André Barros de Sales
+
+**Matrícula**: 160140410
+
+**Aluno**: Yudi Yamame
+EOM
+
+mkdir -p $dir_path
+> $fullpath
+echo "$template" >> $fullpath

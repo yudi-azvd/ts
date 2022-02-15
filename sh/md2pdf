@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Uso (na raíz do repositório)
+# $ sh/md2pdf.sh src/<...>/arquivo.md
+# É obrigatório que o arquivo tenha .md 
+
+# Dependecias
+# pandoc
+# um monte de outra lib de latex
+
+# Estilização?
+# https://learnbyexample.github.io/customizing-pandoc/
+# https://pandoc.org/MANUAL.html#custom-styles
+
+input=$1
+input_is_markdown="true"
+ext="${input##*.}"
+
+if [ "$ext" != "md" ]; then
+  echo "input should have the .md extension"
+  exit 1
+fi
+
+# Remove extensão .md
+# https://stackoverflow.com/questions/12152626/how-can-i-remove-the-extension-of-a-filename-in-a-shell-script
+dirname="$(dirname $input)"
+filename="${input%.*}"
+filename_with_ext="$(basename -- $input)"
+filename="${filename_with_ext%.*}"
+output="$filename.pdf"
+
+# para propósitos de depuração
+# echo "input: $input"
+# echo "dir: $dirname"
+# echo "filename: $filename"
+# echo "output: $output"
+
+# o template, na linha 310, tem uma linha que deveria estar comentada
+# template tirado daqui: https://raw.githubusercontent.com/lauritzsh/pandoc-markdown-template/master/assignment/template.tex 
+cd $dirname
+pandoc --no-tex-ligatures \
+  -H ../disable_float.tex \
+  --template ../template.tex \
+  $filename_with_ext \
+  -o $output
+
+
+# Dá uma olhada aqui
+# https://github.com/lauritzsh/pandoc-markdown-template/tree/master/assignment
