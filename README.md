@@ -14,6 +14,8 @@ Repositório para a disciplina Testes de Software (FGA0238) da Universidade de B
 - Cracking the Code Interview (Capítulo de testes)
 
 - [TDD na prática com Rodrigo Manguinho](https://www.youtube.com/watch?v=sg1zFpNM5Jw)
+  - [SOLID + TDD com Diego](https://www.youtube.com/watch?v=mjBsii0eiuI) (pode servir como um vídeo de introdução pro vídeo de cima. Dá pra assistir em 2x até o 
+  minuto 13)
 
 - [Typescript, TDD e Clean Architecture](https://www.youtube.com/playlist?list=PL9aKtVrF05DxIrtD3CuXGnzq8Q0IZ-t8J)
 
