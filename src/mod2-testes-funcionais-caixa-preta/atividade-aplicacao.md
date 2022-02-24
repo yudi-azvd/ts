@@ -48,19 +48,73 @@ Capturas de tela mostrando a execução dos testes (telas com os dados de entrad
 O projeto escolhido pelo grupo foi o [JabRef](https://github.com/JabRef/jabref).
 Os testes podem ser executados rodando
 
-```
-./gradlew test
-```
-
 # Funcionalidade
 
 Não determinei a funcionalidade específica mas estou entre alugmas das funcionalidades
-das actions como `NewEntryAction` e `ImportAction`.
+das actions como `NewEntryAction`  usando o formato de identificação do ArXiv.
 
-# Condições de entrada
+## Formato ArXiv
 
-Para o caso de `NewEntryAction`, as condições de entrada são baseadas no ações do 
-mouse do usuário. Usuário pode escolher gerar uma nova entrada ou cancelar a adição,
-além de escolher as características da entrada.
+Formato geral de entrada: `arXiv:YYMM.number{vV}`, onde `vV` é a versão (`v1`, `v2` etc)
+e é opicional. A especificação dos campos é a seguinte:
 
-(A escolha dessa funcionalidade ainda pode mudar)
+- `YY` is the two-digit year (07=2007 through 99=2099, and potentially up to 06=2106)
+- `MM` is the two-digit month number (01=Jan,...12=Dec)
+- `number` is a zero-padded sequence number of 4- or 5-digits. From 0704 through 1412
+it is 4-digits, starting at `0001`. From 1501 on it is 5-digits, starting at `00001`. 
+5-digits permits up to 99999 submissions per month. We cannot currently anticipate 
+more than 99999 submissions per month although extension to 6-digits would be possible.
+- `vV` is a literal v followed by a version number of 1 or more digits starting at `v1`.
+
+[Fonte](https://arxiv.org/help/arxiv_identifier#new)
+
+## Condições de entrada | Classes de equivalência
+
+| Condição de entrada                    | Classes válidas   | Classes inválidas     |
+| -------------------------------------- | ----------------- | --------------------- |
+| Tamanho do campo `number`              | 4 \<= T \<= 5 (1) | T \< 3 (2), 5 < T (3) |
+| Contém letras nos campos `YY` ou `MM`  | Não (4)           | Sim (5)               |
+| Contém prefixo `arxiv:`                | Sim (6), Não (7)* |                       |
+| Contém um prefixo diferente de `arxiv` |                   | Sim (8)               |
+
+\* O campo de pesquisa do JabRef aceita a entrada com ou sem o prefixo `arxiv`.
+
+
+## Casos de teste
+
+| Número | Entrada            | Saída esperada                     | Classes de equivalência |
+| ------ | ------------------ | ---------------------------------- | ----------------------- |
+| 1      | `2202.10867`       | Adicionar entrada à biblioteca     | 7, 1                    |
+| 2      | `2202.1086`        | Entrada com ID dado não encontrado | 2                       |
+| 3      | `2202.108679`      | Entrada com ID dado não encontrado | 3                       |
+| 4      | `arxiv:2202.10867` | Adicionar entrada à biblioteca     | 6                       |
+| 5      | `outra:2202.10867` | Entrada com ID dado não encontrado | 8                       |
+| 6      | `arxiv:2B0B.10867` | Entrada com ID dado não encontrado | 5                       |
+
+
+## Execução e resultados
+
+### Caso de teste 1
+
+![foto da tela caso de teste 1](./caso-1.png){ width="400" }
+
+### Caso de teste 2
+
+![foto da tela caso de teste 2](./caso-2.png){ width="400" }
+
+### Caso de teste 3
+
+![foto da tela caso de teste 3](./caso-3.png){ width="400" }
+
+### Caso de teste 4
+
+![foto da tela caso de teste 4](./caso-4.png){ width="400" }
+
+### Caso de teste 5
+
+![foto da tela caso de teste 5](./caso-5.png){ width="400" }
+
+### Caso de teste 6
+
+![foto da tela caso de teste 6](./caso-6.png){ width="400" }
+
