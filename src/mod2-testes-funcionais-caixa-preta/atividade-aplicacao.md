@@ -68,7 +68,7 @@ more than 99999 submissions per month although extension to 6-digits would be po
 
 [Fonte](https://arxiv.org/help/arxiv_identifier#new)
 
-## Condições de entrada | Classes de equivalência
+# Condições de entrada e Classes de equivalência
 
 | Condição de entrada                    | Classes válidas   | Classes inválidas     |
 | -------------------------------------- | ----------------- | --------------------- |
@@ -80,7 +80,7 @@ more than 99999 submissions per month although extension to 6-digits would be po
 \* O campo de pesquisa do JabRef aceita a entrada com ou sem o prefixo `arxiv`.
 
 
-## Casos de teste
+# Casos de teste
 
 | Número | Entrada            | Saída esperada                     | Classes de equivalência |
 | ------ | ------------------ | ---------------------------------- | ----------------------- |
@@ -92,29 +92,32 @@ more than 99999 submissions per month although extension to 6-digits would be po
 | 6      | `arxiv:2B0B.10867` | Entrada com ID dado não encontrado | 5                       |
 
 
-## Execução e resultados
+# Execução e resultados
 
-### Caso de teste 1
+Minha impressão geral é que o JabRef não faz uma verificação do formato do ID.
+Ele apenas consulta no banco de dados a entrada digitada pelo usuário.
+
+## Caso de teste 1
 
 ![foto da tela caso de teste 1](./caso-1.png){ width="400" }
 
-### Caso de teste 2
+## Caso de teste 2
 
 ![foto da tela caso de teste 2](./caso-2.png){ width="400" }
 
-### Caso de teste 3
+## Caso de teste 3
 
 ![foto da tela caso de teste 3](./caso-3.png){ width="400" }
 
-### Caso de teste 4
+## Caso de teste 4
 
 ![foto da tela caso de teste 4](./caso-4.png){ width="400" }
 
-### Caso de teste 5
+## Caso de teste 5
 
 ![foto da tela caso de teste 5](./caso-5.png){ width="400" }
 
-### Caso de teste 6
+## Caso de teste 6
 
 ![foto da tela caso de teste 6](./caso-6.png){ width="400" }
 
