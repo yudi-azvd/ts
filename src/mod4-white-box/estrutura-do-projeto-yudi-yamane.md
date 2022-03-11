@@ -53,4 +53,6 @@ Breve texto sobre as suas impressões sobre a documentação
 
 ## Ambiente de desenvolvimento + IDE com projeto aberto
 
-![Ambiente de desenvolvimento + IDE com projeto aberto](dev.png){ width="600" }
+![Intellij com JabRef aberto](dev.png){ width="600" }
+
+## Minha impressões
