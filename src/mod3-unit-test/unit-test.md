@@ -96,7 +96,7 @@ onerosas quanto maiores forem as entidades sob teste.
 > Analizar a lógica do módulo usando uma ou mais técnicas de caixa branca e, então
 > suplementar esses testes aplicando técnicas de caixa preta.
 
-- o primeiro passo é listar todas as decisões condifionais do programa.
+- o primeiro passo é listar todas as decisões condicionais do programa.
 
 <!-- ### Testes incrementais
 

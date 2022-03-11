@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# $1: caminho relativo para o documento Markdown
+
+dirname="$(dirname $1)"
+mdfile=$1
+mdfile="${mdfile%.*}"
+
+# Remove file extension from mdfile
+mdfile="${mdfile%.*}"
+
+pwd
+echo $mdfile.pdf
+nautilus "{$mdfile}.pdf"

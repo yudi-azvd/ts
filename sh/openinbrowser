@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# $1: caminho relativo para o documento Markdown
+
+mdfile=$1
+mdfile="${mdfile%.*}"
+
+# Remove file extension from mdfile
+mdfile="${mdfile%.*}"
+
+echo $mdfile
+brave-browser "{$mdfile}.pdf"

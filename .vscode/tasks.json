@@ -21,6 +21,34 @@
         "clear": false,
         "revealProblems": "onProblem"
       }
+    },
+    {
+      "label": "open-in-browser",
+      "type": "shell",
+      "command": "./sh/openinbrowser ${relativeFile}",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false,
+        "revealProblems": "onProblem"
+      }
+    },
+    {
+      "label": "open-in-nautilus",
+      "type": "shell",
+      "command": "./sh/openinnautilus ${relativeFile}",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false,
+        "revealProblems": "onProblem"
+      }
     }
   ]
 }

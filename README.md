@@ -3,6 +3,25 @@ Repositório para a disciplina Testes de Software (FGA0238) da Universidade de B
 
 [Plano de Ensino](https://aprender3.unb.br/pluginfile.php/1806172/mod_resource/content/0/Plano%20Ensino%20Teste%20-%202021_2.pdf)
 
+## Útil
+
+Para mostrar o PDF no navegador por atalho, adicionar o sequinte ao `keybindings.json`:
+
+```json
+// Por enquanto não funcionam hehehe
+  {
+    "key": "alt+b",
+    "command": "workbench.action.tasks.runTask",
+    "args": "open-in-browser"
+  },
+    {
+    "key": "alt+n",
+    "command": "workbench.action.tasks.runTask",
+    "args": "open-in-nautilus"
+  },
+```
+
+
 ## Bibliografia
 - Test Driven Development: by example, Kent Beck
 
