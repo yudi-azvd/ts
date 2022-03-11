@@ -12,7 +12,7 @@ title="$(echo $fullpath | sed -r 's/.*\/(\w+)Exe.*/\1/')"
 template=""
 read -r -d '' template << EOM
 ---
-title: 'Engenharia de Requisitos - $title' 
+title: 'Testes de Software - $title' 
 ---
 
 <!--
