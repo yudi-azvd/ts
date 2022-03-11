@@ -46,7 +46,7 @@ Breve texto sobre as suas impressões sobre a documentação
 - [JabRef's development strategy](https://devdocs.jabref.org/getting-into-the-code/development-strategy)
 - [Links para decisões de arquitetura](https://devdocs.jabref.org/adr)
 
-## Links do fork
+## Link do fork
 
 [yudi-azvd/jabref](https://github.com/yudi-azvd/jabref)
 
@@ -56,3 +56,8 @@ Breve texto sobre as suas impressões sobre a documentação
 ![Intellij com JabRef aberto](dev.png){ width="600" }
 
 ## Minha impressões
+
+A documentação parece ser bem rica, o que cria um ambiente convidativo
+pra inciantes e inexperientes. Também não parece ter uma ordem de leitura dos
+documentos, o que pode ser um pouco confuso, mas isso deve ser normal no mundo 
+open source.
