@@ -8,7 +8,8 @@ mdfile="${mdfile%.*}"
 
 # Remove file extension from mdfile
 mdfile="${mdfile%.*}"
+pdffile="$mdfile.pdf"
 
 pwd
 echo $mdfile.pdf
-nautilus "{$mdfile}.pdf"
+nautilus $pdffile
