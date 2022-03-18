@@ -35,12 +35,16 @@ output="$filename.pdf"
 # echo "filename: $filename"
 # echo "output: $output"
 
+curr_dir=$(pwd)
+tex_template_file="$curr_dir/src/template.tex"
+disable_float_file="$curr_dir/src/disable_float.tex"
+
 # o template, na linha 310, tem uma linha que deveria estar comentada
 # template tirado daqui: https://raw.githubusercontent.com/lauritzsh/pandoc-markdown-template/master/assignment/template.tex 
 cd $dirname
 pandoc --no-tex-ligatures \
-  -H ../disable_float.tex \
-  --template ../template.tex \
+  -H $disable_float_file \
+  --template $tex_template_file \
   $filename_with_ext \
   -o $output
 
