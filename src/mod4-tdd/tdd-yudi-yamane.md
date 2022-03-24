@@ -55,7 +55,7 @@ funcionando e testes passando
 Livro: Test-Driven Java Development, capítulos 1, 3 e 6.
 
 Os testes do livro foram implementados e estão no repositório
-[yudi-azvd/tdd-java](https://github.com/yudi-azvd/tdd-java)
+[yudi-azvd/tdd-java](https://github.com/yudi-azvd/tdd-java).
 
 - Abraçar e aceitar **falha** como parte do desenvolvimento
 
@@ -74,9 +74,9 @@ o casos de teste curtos e fáceis de entender.
 
 - Incentiva baixo acoplamento
 
-- Documentação atualizada
+- Documentação sempre atualizada
 
-- Código teste realizado _depois_ da implementação tende a ser enviesado a 
+- Código de teste realizado _depois_ da implementação tende a ser enviesado a 
 confirmar o que a implementação faz, não necessariamente tentando encontrar erros
 
 ### Ciclo _red-green-refactor_
@@ -108,7 +108,7 @@ preocupar com organização do código na fase refatoração
     - pong (implementar código)
     - ping (escrever mais um teste e rodar testes)
     - ponto (refatorar código e confirmar que testes continuam passando)
-    - jogo rápido que nem tênis de mesa
+    - jogo rápido como tênis de mesa
 
 - O objetivo principal do TDD é design de código testável com testes
 como resultado secundário que garantem que um alerta vai tocar quando alguém
