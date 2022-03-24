@@ -8,6 +8,9 @@ numbersections: true
 Link da entrega:
 https://aprender3.unb.br/mod/assign/view.php?id=689081
 
+Livro:
+file:///home/yudi/Documents/3-recursos/livros/programming/Test-Driven%20Java%20Development%20Invoke%20TDD%20principles%20for%20end-to-end%20application%20development%20with%20Java%20Viktor%20Farcic,%20Alex%20Garcia%20.pdf
+
 -->
 
 **Disciplina**: Testes de Software
@@ -49,11 +52,16 @@ funcionando e testes passando
 
 ## TDD
 
-Livro: Test-Driven Java Development
+Livro: Test-Driven Java Development, capítulos 1, 3 e 6.
+
+Os testes do livro foram implementados e estão no repositório
+[yudi-azvd/tdd-java](https://github.com/yudi-azvd/tdd-java)
 
 - Abraçar e aceitar **falha** como parte do desenvolvimento
 
-- Testes são como uma documentação executável
+- Testes são como uma documentação executável. Cada funcionalidade idealmente
+possui um conjunto de testes que garantem o seu funcionamento e detalham o seu
+funcionamento em certos casos teste
 
 - Sessões de depuração são menos necessárias
 
@@ -67,6 +75,9 @@ o casos de teste curtos e fáceis de entender.
 - Incentiva baixo acoplamento
 
 - Documentação atualizada
+
+- Código teste realizado _depois_ da implementação tende a ser enviesado a 
+confirmar o que a implementação faz, não necessariamente tentando encontrar erros
 
 ### Ciclo _red-green-refactor_
 
@@ -84,8 +95,48 @@ o casos de teste curtos e fáceis de entender.
 - Não faça a implementação do testes final a implementação definitiva, 
 nem tente escrever o código perfeito. Apenas escrever código o suficiente para o teste passar
 
-- O importante é agilidade, o ciclo deve ser muito curto. Pode se 
+- Todos os testes devem passar antes antes de seguir para o próximo 
+teste
+
+- O importante é agilidade, o ciclo deve ser muito curto. Passar da fase de teste
+para a fase de implementação deve levar alguns minutos ou segundos. Pode-se 
 preocupar com organização do código na fase refatoração
+
+    - ping (escrever um teste e rodar testes)
+    - pong (implementar código)
+    - ping (escrever mais um teste e rodar testes)
+    - pong (implementar código)
+    - ping (escrever mais um teste e rodar testes)
+    - ponto (refatorar código e confirmar que testes continuam passando)
+    - jogo rápido que nem tênis de mesa
+
+- O objetivo principal do TDD é design de código testável com testes
+como resultado secundário que garantem que um alerta vai tocar quando alguém
+quebrar uma parte do código no futuro
 
 
 ### Mocks
+
+- permite o design do código de forma que as dependências sejam facilmente
+substituíveis porque é encorajado que fatores externos sejam removidos (conexão
+com banco de dados, APIs, outros servidores e serviços)
+- desenvolvimento e execução dos testes é mais rápido. Regra geral,
+em TDD os testes devem executar em 10 a 15 segundos para manter a
+sanidade e o engajamento dos desenvolvedores.
+- se o teste for bem feito, o que é testado é apenas o código principal e não
+as conexões com banco de dados ou outros servidores externos. O código é
+**isolado** de todas as suas dependências
+
+Dublês de teste têm os seguintes tipos:
+
+- Dummy object: agir como subtituto para um argumento real de um método
+- Stub: fornece a entrada desejada para o system under test (SUT)
+- Spy: intercepta de saída indireta de outro componente chamado pelo SUT
+- Mock: substitui um _objeto_ que é dependência do SUT para que seja verificado
+que está sendo corretamente usado pelo SUT
+- Fake: substitui um _componente_ que é dependência do SUT com uma implementação 
+mais leve.
+
+Páginas 135, 136.
+<!-- Páginas 158, 159 -->
+
