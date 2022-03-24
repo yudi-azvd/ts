@@ -55,7 +55,7 @@ funcionando e testes passando
 Livro: Test-Driven Java Development, capítulos 1, 3 e 6.
 
 Os testes do livro foram implementados e estão no repositório
-[yudi-azvd/tdd-java](https://github.com/yudi-azvd/tdd-java).
+[yudi-azvd/tdd-java](https://github.com/yudi-azvd/book-tdd-java).
 
 - Abraçar e aceitar **falha** como parte do desenvolvimento
 

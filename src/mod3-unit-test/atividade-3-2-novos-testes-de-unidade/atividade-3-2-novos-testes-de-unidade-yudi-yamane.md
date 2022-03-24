@@ -22,6 +22,15 @@ https://aprender3.unb.br/mod/assign/view.php?id=687602
 
 Um arquivo contendo:
 
+<!--
+csv to markdown 
+- https://blog.lent.ink/post/start-coding/
+- https://stackoverflow.com/questions/41690802/convert-csv-file-contents-to-markdown
+- https://github.com/mplewis/csvtomd
+
+csvtomd conditions.csv | xclip -selection c
+ -->
+
 1. O código completo do método a ser testado, incluindo a identificação da classe, caminho e o link para o repositório.
 1. O código dos testes existentes (originais) para o método escolhido (se existir), incluindo a identificação da classe, caminho e o link para o repositório.
 1. Tabela de identificação das decisões/condições e situações.
