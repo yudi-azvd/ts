@@ -20,8 +20,6 @@ https://aprender3.unb.br/mod/assign/view.php?id=687602
 
 **Aluno**: Yudi Yamame
 
-Um arquivo contendo:
-
 <!--
 csv to markdown 
 - https://blog.lent.ink/post/start-coding/
@@ -31,10 +29,42 @@ csv to markdown
 csvtomd conditions.csv | xclip -selection c
  -->
 
-1. O código completo do método a ser testado, incluindo a identificação da classe, caminho e o link para o repositório.
-1. O código dos testes existentes (originais) para o método escolhido (se existir), incluindo a identificação da classe, caminho e o link para o repositório.
-1. Tabela de identificação das decisões/condições e situações.
-1. Especificação dos casos de teste criados (com mapeamento para as decisões/condições).
-1.  Código fonte dos testes implementados (incluir nos comentários de cada método de teste uma identificação do caso de teste especificado conforme item anterior). Incluir a identificação da classe, caminho e o link para o repositório.
-1. Resultado dos testes, captura de tela e comentário sobre os resultados obtidos.
-1. Captura de tela do pull request, se realizado (opcional).
+## Código
+
+![Código a ser testado \ref{fig:code}](./code.png)
+
+`src/main/java/org/jabref/logic/util/strings/StringManipulator.java`
+
+método `SilverPlatterImporter.isRecognizedFormat(BufferedReader reader)`
+
+Classe: `SilverPlatterImporter`
+
+Caminho: `src/main/java/org/jabref/logic/importer/fileformat/SilverPlatterImporter.java`
+
+Link: [yudi-azvd/jabref](https://github.com/yudi-azvd/jabref)
+
+## Testes existentes
+
+![Testes existentes](./existing-tests.png)
+
+## Tabela de condições
+
+<!-- 
+Link da planilha:
+https://docs.google.com/spreadsheets/d/14dO35E1V3v2mx9WWJAip2BABqZEFTjRo-XYvRG7nvqQ/edit#gid=1008933058
+ -->
+
+| ID   | Condição                           | Situação para V | Situação para F |
+|------|------------------------------------|-----------------|-----------------|
+|   52 | (str = reader.readLine()) != null  |                 |                 |
+|   54 | START_PATTERN.matcher(str).find()  |                 |                 |
+| 58.1 | str.length() >= 5                  |                 |                 |
+| 58.2 | "TI: ".equals(str.substring(0, 5)) |                 |                 |
+
+
+## Especificação dos casos de teste
+
+## Código fonte dos testes
+
+## Resultado dos testes
+
