@@ -45,6 +45,9 @@ Link: [yudi-azvd/jabref](https://github.com/yudi-azvd/jabref)
 
 ## Testes existentes
 
+Testes existes estão no arquivo [`SilverPlatterImporterTest.java`](https://github.com/yudi-azvd/jabref/blob/main/src/test/java/org/jabref/logic/importer/fileformat/SilverPlatterImporterTest.java)
+.
+
 ![Testes existentes](./existing-tests.png)
 
 ## Tabela de condições
@@ -54,17 +57,33 @@ Link da planilha:
 https://docs.google.com/spreadsheets/d/14dO35E1V3v2mx9WWJAip2BABqZEFTjRo-XYvRG7nvqQ/edit#gid=1008933058
  -->
 
-| ID   | Condição                           | Situação para V | Situação para F |
-|------|------------------------------------|-----------------|-----------------|
-|   52 | (str = reader.readLine()) != null  |                 |                 |
-|   54 | START_PATTERN.matcher(str).find()  |                 |                 |
-| 58.1 | str.length() >= 5                  |                 |                 |
-| 58.2 | "TI: ".equals(str.substring(0, 5)) |                 |                 |
-
+![Tabela de condições \label{fig:cond-table}](./conditions-table.png).
 
 ## Especificação dos casos de teste
 
+| ID  | Condições cobertas | Entrada (str)               | Saída esperada |
+| --- | ------------------ | --------------------------- | -------------- |
+| 1   | 54.V               | `"Record..stuff..INSPEC\n"` | Falso          |
+| 2   | 54.F               | `"UT INSPEC:777777\n"`      | Falso          |
+|     | 58.1.F, 58.2.V     | Impossível                  | Falso          |
+|     | 58.1.F, 58.2.F     | `"FA:  \n"`                 | Falso          |
+|     | 58.1.V, 58.2.F     | `"..."`                     | Falso          |
+|     | 58.1.V, 58.2.V     | `"TI:       \n"`            | Verdadeiro     |
+
+
+Todos os casos de teste da tabela anterior cobrem a condição da linha 52, por
+isso foi omitido na tabela.
+
+A combinação 58.1.F, 58.2.V é impossível por que `str.substring(0, 5)`
+não faz sentido se `str` é uma string com menos de 5 caracteres.
+
 ## Código fonte dos testes
+
+[Link](https://github.com/yudi-azvd/jabref/blob/main/src/test/java/org/jabref/logic/importer/fileformat/MySilverPlatterImporterTest.java)
+para o código no GitHub.
 
 ## Resultado dos testes
 
+Os testes deram certo.
+
+![Resultados dos testes](./tests-results.png)
