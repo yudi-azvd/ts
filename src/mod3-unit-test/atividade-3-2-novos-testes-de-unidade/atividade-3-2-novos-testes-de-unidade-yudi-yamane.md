@@ -65,10 +65,10 @@ https://docs.google.com/spreadsheets/d/14dO35E1V3v2mx9WWJAip2BABqZEFTjRo-XYvRG7n
 | --- | ------------------ | --------------------------- | -------------- |
 | 1   | 54.V               | `"Record..stuff..INSPEC\n"` | Falso          |
 | 2   | 54.F               | `"UT INSPEC:777777\n"`      | Falso          |
-|     | 58.1.F, 58.2.V     | Impossível                  | Falso          |
-|     | 58.1.F, 58.2.F     | `"FA:  \n"`                 | Falso          |
-|     | 58.1.V, 58.2.F     | `"..."`                     | Falso          |
-|     | 58.1.V, 58.2.V     | `"TI:       \n"`            | Verdadeiro     |
+| 3   | 58.1.F, 58.2.V     | Impossível                  | Falso          |
+| 4   | 58.1.F, 58.2.F     | `"FA:  \n"`                 | Falso          |
+| 5   | 58.1.V, 58.2.F     | `"..."`                     | Falso          |
+| 6   | 58.1.V, 58.2.V     | `"TI:       \n"`            | Verdadeiro     |
 
 
 Todos os casos de teste da tabela anterior cobrem a condição da linha 52, por

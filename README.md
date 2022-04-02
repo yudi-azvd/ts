@@ -40,6 +40,8 @@ Para mostrar o PDF no navegador por atalho, adicionar o sequinte ao `keybindings
 
 - [Testes do jeito certo com Rodrigo Branas](https://www.youtube.com/watch?v=M46XisdGXJA)
 
+- [Web E2E Testing](https://dev-academy.teachable.com/courses/web-e2e-testing/lectures/38735859)
+
 - [Clean Architecture, Rodrigo Branas](https://www.youtube.com/watch?v=BuSf7VsH064)
 
 - [Test guide](https://martinfowler.com/testing/), do Martin Fowler
