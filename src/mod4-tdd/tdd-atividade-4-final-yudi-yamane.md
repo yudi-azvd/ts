@@ -1,5 +1,5 @@
 ---
-title: 'Testes de Software - TDD - Atividade 4 - Atividade Parcial 2' 
+title: 'Testes de Software - TDD - Atividade 4 - Final' 
 numbersections: true
 ---
 
@@ -177,11 +177,6 @@ Requisito de pesquisa.
 
 ### Especificação do teste
 
-fazer testes em cima do `.getURLForQuery()`.
-
-A princípio seria colocado a resposta esperada hard coded? Sim. Os próximos testes
-devem me forçar a implementar corretamente depois.
-
 ![Ciclo 2, especificação do teste\label{fig:tdd-p2-c2-spec}](./tdd-p2-c2-spec.png){ width=600 }
 
 ### Vermelho
@@ -199,20 +194,23 @@ Para fazer os testes passarem, foi implmentado o seguinte:
 
 ```java
 public class BHLFetcher implements SearchBasedParserFetcher {
+  final String API_KEY = new BuildInfo().bhlAPIKey;
   private final String SEARCH_URL = "https://www.biodiversitylibrary.org/api3?";
-  private final String API_KEY = new BuildInfo().bhlAPIKey;
 
   // ...
 
   @Override
-  public URL getURLForQuery(QueryNode luceneQuery) throws URISyntaxException, MalformedURLException, FetcherException {
+  public URL getURLForQuery(QueryNode luceneQuery) throws URISyntaxException, MalformedURLException,
+   FetcherException 
+  {
     URIBuilder uriBuilder = new URIBuilder(SEARCH_URL);
     uriBuilder.addParameter("op", "PublicationSearch");
-    uriBuilder.addParameter("searchterm", new DefaultQueryTransformer().transformLuceneQuery(luceneQuery).orElse(""));
+    uriBuilder.addParameter("searchterm", new DefaultQueryTransformer().
+      btransformLuceneQuery(luceneQuery).orElse(""));
     uriBuilder.addParameter("searchtype", "C");
     uriBuilder.addParameter("page", "1");
     uriBuilder.addParameter("pageSize", "10");
-    uriBuilder.addParameter("apikey", "bhlAPIKey");
+    uriBuilder.addParameter("apikey", API_KEY);
     uriBuilder.addParameter("format", "json");
 
     return uriBuilder.build().toURL();
@@ -221,3 +219,155 @@ public class BHLFetcher implements SearchBasedParserFetcher {
 ```
 
 E os testes passaram.
+
+
+## Ciclo 3
+
+Converter resposta de JSON para para Bibtex.
+
+### Especificação do teste
+
+![Ciclo 3, especificação do teste\label{fig:tdd-p2-c3-spec}](./tdd-p2-c3-spec.png){ width=600 }
+
+Esse teste verifica se parser consegue converter um objeto JSON em uma entrada Bib.
+Esse JSON foi retirado de uma resposta da API. A parte principal da resposta
+está no vetor `"Result"` (originalmente `"Result"` vem com vários objetos, mas deixei
+apenas o primeiro para o caso de teste).
+
+
+### Vermelho
+
+Executar os testes resulta em um erro de compilação: o método `parseBHLJSONToBibtex`
+não existe.
+
+![Ciclo 3, vermelho\label{fig:tdd-p2-c3-red-1}](./tdd-p2-c3-red-1.png){ width=600 }
+
+
+Implementando o mínimo do método `parseBHLJSONToBibtex` em `BHLFetcher` temos o seguinte
+
+```java
+public class BHLFetcher implements SearchBasedParserFetcher {
+  // ...
+  public static BibEntry parseBHLJSONToBibtex(JSONObject jsonObject) {
+    BibEntry bibEntry = new BibEntry();
+    return bibEntry;
+  }
+}
+```
+
+Rodar os testes novamente resulta em um erro de asserção:
+
+![Ciclo 3, vermelho 2\label{fig:tdd-p2-c3-red-2}](./tdd-p2-c3-red-2.png){ width=600 }
+
+A asserção falha porque o código implementado apenas retorna uma `BiBEntry` vazia.
+Para corrigir isso, vamos acrecentar o seguinte código.
+
+
+```java
+public static BibEntry parseBHLJSONToBibtex(JSONObject jsonObject) {
+  BibEntry bibEntry = new BibEntry();
+
+  if (jsonObject.has("Result")) {
+    JSONArray results = jsonObject.getJSONArray("Result");
+    for (int i = 0; i < results.length(); i++) {
+      if (results.getJSONObject(i).has("Date")) {
+        bibEntry.setField(StandardField.DATE, results.getJSONObject(i).getString("Date"));
+      }
+    }
+  }
+  return bibEntry;
+}
+```
+
+Agora o método `parseBHLJSONToBibtex` itera no vetor `"Result"`. Em uma pesquisa por termos,
+esse vetor pode vir preenchido com vários objetos, por isso o loop é necessário.
+
+Executar os testes retorna outro erro:
+
+![Ciclo 3, vermelho 3\label{fig:tdd-p2-c3-red-3}](./tdd-p2-c3-red-3.png){ width=600 }
+
+Aparentemente, o campo da data foi extraído corretamente. Agora a próxima asserção sobre o nome
+do autor é que está falhando. O método foi modificado assim:
+
+```java
+public static BibEntry parseBHLJSONToBibtex(JSONObject jsonObject) {
+  BibEntry bibEntry = new BibEntry();
+
+  if (jsonObject.has("Result")) {
+    JSONArray results = jsonObject.getJSONArray("Result");
+    for (int i = 0; i < results.length(); i++) {
+      if (results.getJSONObject(i).has("Date")) {
+        bibEntry.setField(StandardField.DATE, results.getJSONObject(i).getString("Date"));
+      }
+      if (results.getJSONObject(i).has("Authors")) {
+        JSONArray authors = results.getJSONObject(i).getJSONArray("Authors");
+        List<String> authorsList = new ArrayList<>();
+        for (int j = 0; j < authors.length(); j++) {
+          if (authors.getJSONObject(j).has("Name")) {
+            authorsList.add(authors.getJSONObject(i).getString("Name"));
+          } else {
+            LOGGER.info("Empty author name.");
+          }
+        }
+        bibEntry.setField(StandardField.AUTHOR, String.join(" and ", authorsList));
+      } else {
+        LOGGER.info("No author found.");
+      }
+    }
+  }
+  return bibEntry;
+}
+```
+
+O que mudou foi a verificação por um campo `"Authors"` na 
+linha `if (results.getJSONObject(i).has("Authors")`.
+
+Rodar os testes novamente resulta em outro erro:
+
+![Ciclo 3, vermelho 4\label{fig:tdd-p2-c3-red-4}](./tdd-p2-c3-red-4.png){ width=600 }
+
+O erro agora é sobre campo título. Vamos repetir esse processo para 
+todos os campos restantes. O seguinte código faz os testees passarem.
+
+```java
+public static BibEntry parseBHLJSONToBibtex(JSONObject jsonObject) {
+  BibEntry bibEntry = new BibEntry();
+
+  if (jsonObject.has("Result")) {
+    JSONArray results = jsonObject.getJSONArray("Result");
+    for (int i = 0; i < results.length(); i++) {
+      if (results.getJSONObject(i).has("Date")) {
+        bibEntry.setField(StandardField.DATE, results.getJSONObject(i).getString("Date"));
+      }
+      if (results.getJSONObject(i).has("Authors")) {
+        JSONArray authors = results.getJSONObject(i).getJSONArray("Authors");
+        List<String> authorsList = new ArrayList<>();
+        for (int j = 0; j < authors.length(); j++) {
+          if (authors.getJSONObject(j).has("Name")) {
+            authorsList.add(authors.getJSONObject(i).getString("Name"));
+          } else {
+            LOGGER.info("Empty author name.");
+          }
+        }
+        bibEntry.setField(StandardField.AUTHOR, String.join(" and ", authorsList));
+      } else {
+        LOGGER.info("No author found.");
+      }
+      if (results.getJSONObject(i).has("Title")) {
+          bibEntry.setField(StandardField.TITLE, results.getJSONObject(i).getString("Title"));
+      }
+      if (results.getJSONObject(i).has("PartUrl")) {
+          bibEntry.setField(StandardField.URL, results.getJSONObject(i).getString("PartUrl"));
+      }
+      if (results.getJSONObject(i).has("Series")) {
+          bibEntry.setField(StandardField.SERIES, results.getJSONObject(i).getString("Series"));
+      }
+      if (results.getJSONObject(i).has("Volume")) {
+          bibEntry.setField(StandardField.VOLUME, results.getJSONObject(i).getString("Volume"));
+      }
+    }
+  }
+  return bibEntry;
+}
+```
+
