@@ -5,7 +5,7 @@ numbersections: true
 
 <!--
 Link da entrega:
-https://aprender3.unb.br/mod/assign/view.php?id=691625
+https://aprender3.unb.br/mod/assign/view.php?id=691622
 
 -->
 
@@ -55,27 +55,27 @@ obter toda a informação que precisa.
 
 # Requisitos
 
-## Básico
+- Deve retornar o nome ao ser invocado o método `.getName()` (importante para o usuário saber
+qual é o banco de dados que vai ser usado para a pesquisa)
+- Deve fazer o parse da resposta JSON que API devolve.
+- Deve utilizar a URL correta para fazer a pesquisa.
 
-- Deve retornar o nome ao ser invocado o método `.getName()`
+# Usando o TDD
 
-## Autenticação
+A prática do TDD foi semelhante à prática apresentada no capítulo 3 do livro 
+_Test-Driven Java Development_. 
 
-- Deve lançar uma exceção se a chave de API for inválida.
-- Deve lançar uma exceção se a chave de API tiver permissão o suficiente para o 
-método.
+- Escrever a especificação da funcionalidade no código
+de teste
+- Executar testes pra verificar que não há falso positivo
+- Implementar funcionalidade (diferente do livro, não segui muito a proposta do
+implementar apenas o necessário para passar)
+- Executar testes novamente para verificar o funcionamento correto.
+- Refatorar código (fiz isso apenas algumas vezes)
 
-## Pesquisa
-
-- Deve lançar uma exceção se o método escolhido não existir.
-- Deve retornar os BibEntries para uma determinada pesquisa de publicações
-com o método `PublicationSearch` da API através de `searchterm`s.
-- Deve retornar BibEntry dado o ID de uma publicação.
-
-## Observações
-
-Até a próxima entrega serão adicionados mais requisitos. Vai ser possível 
-entender melhor como funciona a API e seus mecanismos de pesquisa.
+O jogo rápido de ping pong mencionado no livro não transpareceu durante a realização
+dessa atividade.  Eu tinha wue ficar alternando entre os arquivos do projeto para
+entender o que eu devia fazer.
 
 # Execução do TDD
 
@@ -102,7 +102,7 @@ public class BHLFetcher implements SearchBasedParserFetcher {
 
 ### Vermelho
 
-Rodar os testes dão geram um erro de compilação, como mostrado na figura \ref{fig:tdd-p2-c1-red-1}:
+Rodar os testes gera um erro de compilação, como mostrado na figura \ref{fig:tdd-p2-c1-red-1}:
 
 ![Ciclo 1, vermelho\label{fig:tdd-p2-c1-red-1}](./tdd-p2-c1-red-1.png){ width=600 }
 
@@ -167,13 +167,9 @@ public class BHLFetcher implements SearchBasedParserFetcher {
 Rodando os testes agora passamos para a fase verde. Como o código até o momento
 é muito simples, não é necessária refatoração ou limpeza.
 
-Testar se o método `getURI<alguma-coisa>` retorna algo do tipo:
-
-    https://www.biodiversitylibrary.org/api3?op=<method>...&apikey=<key+value>&format=json
-
 ## Ciclo 2
 
-Requisito de pesquisa.
+Requisito de pesquisa
 
 ### Especificação do teste
 
@@ -185,7 +181,7 @@ Rodar os testes resulta em
 
 ![Ciclo 2, vermelho\label{fig:tdd-p2-c2-red-1}](./tdd-p2-c2-red-1.png){ width=600 }
 
-A `url` retornada na linha xx da figura \ref{fig:tdd-p2-c2-red-1} é nula porque 
+A `url` retornada na linha 35 da figura \ref{fig:tdd-p2-c2-red-1} é nula porque 
 o método ainda não foi implementado.
 
 ### Verde
@@ -264,16 +260,11 @@ Para corrigir isso, vamos acrecentar o seguinte código.
 
 
 ```java
-public static BibEntry parseBHLJSONToBibtex(JSONObject jsonObject) {
+public static BibEntry parseBHLJSONToBibtex(JSONObject bhlJSONResult) {
   BibEntry bibEntry = new BibEntry();
 
-  if (jsonObject.has("Result")) {
-    JSONArray results = jsonObject.getJSONArray("Result");
-    for (int i = 0; i < results.length(); i++) {
-      if (results.getJSONObject(i).has("Date")) {
-        bibEntry.setField(StandardField.DATE, results.getJSONObject(i).getString("Date"));
-      }
-    }
+  if (bhlJSONResult.has("Date")) {
+    bibEntry.setField(StandardField.DATE, bhlJSONResult.getString("Date"));
   }
   return bibEntry;
 }
@@ -290,84 +281,144 @@ Aparentemente, o campo da data foi extraído corretamente. Agora a próxima asse
 do autor é que está falhando. O método foi modificado assim:
 
 ```java
-public static BibEntry parseBHLJSONToBibtex(JSONObject jsonObject) {
+public static BibEntry parseBHLJSONToBibtex(JSONObject bhlJSONResult) {
   BibEntry bibEntry = new BibEntry();
 
-  if (jsonObject.has("Result")) {
-    JSONArray results = jsonObject.getJSONArray("Result");
-    for (int i = 0; i < results.length(); i++) {
-      if (results.getJSONObject(i).has("Date")) {
-        bibEntry.setField(StandardField.DATE, results.getJSONObject(i).getString("Date"));
-      }
-      if (results.getJSONObject(i).has("Authors")) {
-        JSONArray authors = results.getJSONObject(i).getJSONArray("Authors");
-        List<String> authorsList = new ArrayList<>();
-        for (int j = 0; j < authors.length(); j++) {
-          if (authors.getJSONObject(j).has("Name")) {
-            authorsList.add(authors.getJSONObject(i).getString("Name"));
-          } else {
-            LOGGER.info("Empty author name.");
-          }
-        }
-        bibEntry.setField(StandardField.AUTHOR, String.join(" and ", authorsList));
+  if (bhlJSONResult.has("Date")) {
+    bibEntry.setField(StandardField.DATE, bhlJSONResult.getString("Date"));
+  }
+  if (bhlJSONResult.has("Authors")) {
+    JSONArray authors = bhlJSONResult.getJSONArray("Authors");
+    List<String> authorsList = new ArrayList<>();
+    for (int j = 0; j < authors.length(); j++) {
+      if (authors.getJSONObject(j).has("Name")) {
+        authorsList.add(authors.getJSONObject(j).getString("Name"));
       } else {
-        LOGGER.info("No author found.");
+        LOGGER.info("Empty author name.");
       }
     }
+    bibEntry.setField(StandardField.AUTHOR, String.join(" and ", authorsList));
+  } else {
+    LOGGER.info("No author found.");
   }
   return bibEntry;
 }
 ```
 
 O que mudou foi a verificação por um campo `"Authors"` na 
-linha `if (results.getJSONObject(i).has("Authors")`.
+linha `if (bhlJSONResult.has("Authors")`.
 
 Rodar os testes novamente resulta em outro erro:
 
 ![Ciclo 3, vermelho 4\label{fig:tdd-p2-c3-red-4}](./tdd-p2-c3-red-4.png){ width=600 }
 
 O erro agora é sobre campo título. Vamos repetir esse processo para 
-todos os campos restantes. O seguinte código faz os testees passarem.
+todos os campos restantes. 
+
+### Verde
+O seguinte código faz os testes passarem.
 
 ```java
-public static BibEntry parseBHLJSONToBibtex(JSONObject jsonObject) {
+public static BibEntry parseBHLJSONToBibtex(JSONObject bhlJSONResult) {
   BibEntry bibEntry = new BibEntry();
 
-  if (jsonObject.has("Result")) {
-    JSONArray results = jsonObject.getJSONArray("Result");
-    for (int i = 0; i < results.length(); i++) {
-      if (results.getJSONObject(i).has("Date")) {
-        bibEntry.setField(StandardField.DATE, results.getJSONObject(i).getString("Date"));
-      }
-      if (results.getJSONObject(i).has("Authors")) {
-        JSONArray authors = results.getJSONObject(i).getJSONArray("Authors");
-        List<String> authorsList = new ArrayList<>();
-        for (int j = 0; j < authors.length(); j++) {
-          if (authors.getJSONObject(j).has("Name")) {
-            authorsList.add(authors.getJSONObject(i).getString("Name"));
-          } else {
-            LOGGER.info("Empty author name.");
-          }
-        }
-        bibEntry.setField(StandardField.AUTHOR, String.join(" and ", authorsList));
+  if (bhlJSONResult.has("Date")) {
+    bibEntry.setField(StandardField.DATE, bhlJSONResult.getString("Date"));
+  }
+  if (bhlJSONResult.has("Authors")) {
+    JSONArray authors = bhlJSONResult.getJSONArray("Authors");
+    List<String> authorsList = new ArrayList<>();
+    for (int j = 0; j < authors.length(); j++) {
+      if (authors.getJSONObject(j).has("Name")) {
+        authorsList.add(authors.getJSONObject(i).getString("Name"));
       } else {
-        LOGGER.info("No author found.");
-      }
-      if (results.getJSONObject(i).has("Title")) {
-          bibEntry.setField(StandardField.TITLE, results.getJSONObject(i).getString("Title"));
-      }
-      if (results.getJSONObject(i).has("PartUrl")) {
-          bibEntry.setField(StandardField.URL, results.getJSONObject(i).getString("PartUrl"));
-      }
-      if (results.getJSONObject(i).has("Series")) {
-          bibEntry.setField(StandardField.SERIES, results.getJSONObject(i).getString("Series"));
-      }
-      if (results.getJSONObject(i).has("Volume")) {
-          bibEntry.setField(StandardField.VOLUME, results.getJSONObject(i).getString("Volume"));
+        LOGGER.info("Empty author name.");
       }
     }
+    bibEntry.setField(StandardField.AUTHOR, String.join(" and ", authorsList));
+  } else {
+    LOGGER.info("No author found.");
+  }
+  if (bhlJSONResult.has("Title")) {
+    bibEntry.setField(StandardField.TITLE, bhlJSONResult.getString("Title"));
+  }
+  if (bhlJSONResult.has("PartUrl")) {
+    bibEntry.setField(StandardField.URL, bhlJSONResult.getString("PartUrl"));
+  }
+  if (bhlJSONResult.has("Series")) {
+    bibEntry.setField(StandardField.SERIES, bhlJSONResult.getString("Series"));
+  }
+  if (bhlJSONResult.has("Volume")) {
+    bibEntry.setField(StandardField.VOLUME, bhlJSONResult.getString("Volume"));
   }
   return bibEntry;
 }
 ```
 
+### Refatoração
+
+As extrações dos campos de data, URL, volume, série e título são muito similares.
+Podemos colocar os campos em um mapa que mapeia de `Field` para uma `String` do
+JSON.
+
+```java
+public static BibEntry parseBHLJSONToBibtex(JSONObject jsonObject) {
+  BibEntry bibEntry = new BibEntry();
+  Map<Field, String> fieldToBHL = new HashMap<>();
+  fieldToBHL.put(StandardField.DATE, "Date");
+  fieldToBHL.put(StandardField.VOLUME, "Volume");
+  fieldToBHL.put(StandardField.TITLE, "Title");
+  fieldToBHL.put(StandardField.SERIES, "Series");
+  fieldToBHL.put(StandardField.URL, "PartUrl");
+
+  if (bhlJSONResult.has("Authors")) {
+    JSONArray authors = bhlJSONResult.getJSONArray("Authors");
+    List<String> authorsList = new ArrayList<>();
+    for (int j = 0; j < authors.length(); j++) {
+      if (authors.getJSONObject(j).has("Name")) {
+        authorsList.add(authors.getJSONObject(i).getString("Name"));
+      } else {
+        LOGGER.info("Empty author name.");
+      }
+    }
+    bibEntry.setField(StandardField.AUTHOR, String.join(" and ", authorsList));
+  } else {
+    LOGGER.info("No author found.");
+  }
+
+  for (var entry : fieldToBHL.entrySet()) {
+    Field field = entry.getKey();
+    String bhlName = entry.getValue();
+    if (bhlJSONResult.has(bhlName)) {
+      String text = bhlJSONResult.getString(bhlName);
+      if (!text.isEmpty()) {
+        bibEntry.setField(field, text);
+      }
+    }
+  }
+
+  return bibEntry;
+}
+```
+
+E os testes continuam passando. A vantagem de fazer assim é que se for necessário
+extrair mais um campo do JSON só precisamos adicionar no mapa `fieldToBHL` o tipo
+de campo Bib e a string que aparece no JSON.
+
+![Ciclo 3, verde](./tdd-final-verde.png){ width=600 }
+
+[Código de teste](https://github.com/yudi-azvd/jabref/blob/add-biodiversity-library/src/test/java/org/jabref/logic/importer/fetcher/BHLFetcherTest.java).
+
+[Código fonte](https://github.com/yudi-azvd/jabref/blob/add-biodiversity-library/src/main/java/org/jabref/logic/importer/fetcher/BHLFetcher.java).
+
+
+# Trabalhos futuros
+
+(nas férias quem sabe)
+
+- Deve retornar BibEntry dado o ID de uma publicação.
+- Deve retornar os BibEntries para uma determinada pesquisa de publicações
+com o método `PublicationSearch` da API através de `searchterm`s.
+- Fazer funcionar de ponta a ponta, com interação com a interface
+gráfica. Eu tentei brevemente, mas dá um erro de SSL no download 
+das informações.
