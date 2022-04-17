@@ -29,8 +29,8 @@ Para mostrar o PDF no navegador por atalho, adicionar o sequinte ao `keybindings
 
 - Fundamentals of Software Testing, Bernard Homès
 
-## Recursos adicionais provavelmente úteis pra essa disciplina
-- Cracking the Code Interview (Capítulo de testes)
+## Recursos adicionais
+- [How To Perfect Software Design With Test Driven Development](https://www.youtube.com/watch?v=ln4WnxX-wrw) 
 
 - [TDD na prática com Rodrigo Manguinho](https://www.youtube.com/watch?v=sg1zFpNM5Jw)
   - [SOLID + TDD com Diego](https://www.youtube.com/watch?v=mjBsii0eiuI) (pode servir como um vídeo de introdução pro vídeo de cima. Dá pra assistir em 2x até o 
@@ -45,3 +45,5 @@ Para mostrar o PDF no navegador por atalho, adicionar o sequinte ao `keybindings
 - [Clean Architecture, Rodrigo Branas](https://www.youtube.com/watch?v=BuSf7VsH064)
 
 - [Test guide](https://martinfowler.com/testing/), do Martin Fowler
+
+- Cracking the Code Interview (Capítulo de testes)
